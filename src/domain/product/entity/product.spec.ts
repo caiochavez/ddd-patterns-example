@@ -1,5 +1,4 @@
 import Product from "./product";
-import Customer from "../../customer/entity/customer";
 
 describe("Product unit tests", () => {
 

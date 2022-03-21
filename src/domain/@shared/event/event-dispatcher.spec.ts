@@ -1,4 +1,4 @@
-import ProductCreatedHandler from "../../product/event/product-created.handler"
+import ProductCreatedHandler from "../../product/event/handler/product-created.handler"
 import EventDispatcher from "./event-dispatcher"
 import ProductCreatedEvent from "../../product/event/product-created.event"
 

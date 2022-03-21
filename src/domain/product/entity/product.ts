@@ -9,7 +9,6 @@ export default class Product {
     this._name = name
     this._price = price
     this.validate()
-
   }
 
   get id (): string {
