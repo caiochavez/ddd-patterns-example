@@ -14,6 +14,7 @@ export default class OrderRepository implements OrderRepositoryInterface {
       order_items: entity.items.map(item => ({
         id: item.id,
         product_id: item.productId,
+        order_id: entity.id,
         name: item.name,
         price: item.price,
         quantity: item.quantity
@@ -21,6 +22,30 @@ export default class OrderRepository implements OrderRepositoryInterface {
     }, {
       include: [{ model: OrderItemModel }]
     })
+  }
+
+  async update(entity: Order): Promise<void> {
+    try {
+      const transaction = await OrderModel.sequelize.transaction()
+      await OrderItemModel.destroy({ where: { order_id: entity.id }, transaction })
+
+      const itemsToCreate = entity.items.map(item => ({
+        id: item.id,
+        product_id: item.productId,
+        order_id: entity.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity
+      }))
+
+      await OrderItemModel.bulkCreate(itemsToCreate, { transaction })
+      await OrderModel.update(
+        { total: entity.totalPrice() },
+        { where: { id: entity.id }, transaction }
+      )
+    } catch {
+      throw new Error('Error on update OrderModel in the Sequelize')
+    }
   }
 
   async find(id: string): Promise<Order> {
@@ -74,7 +99,7 @@ export default class OrderRepository implements OrderRepositoryInterface {
       return new Order(orderFound.id, orderFound.customer_id, items(orderFound.order_items))
     })
 
-    return  orders
+    return orders
   }
 
 }
