@@ -25,6 +25,11 @@ export default class Order {
     return this._items
   }
 
+  changeItems (items: OrderItem[]): void {
+    this._items = items
+    this.validate()
+  }
+
   validate () {
     if (!this._id) throw new Error("id is required")
     if (!this._customerId) throw new Error("customerId is required")

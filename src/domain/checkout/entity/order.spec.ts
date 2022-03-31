@@ -46,4 +46,15 @@ describe('Order unit tests', () => {
 
   })
 
+  it('should change items', () => {
+    const item1 = new OrderItem('11', '1', 'Item 1', 100, 2)
+    const item2 = new OrderItem('12', '2', 'Item 2', 200, 2)
+    const order = new Order('1', '123', [item1, item2])
+    expect(order.items).toStrictEqual([item1, item2])
+
+    const item3 = new OrderItem('13', '3', 'Item 3', 300, 2)
+    order.changeItems([item3])
+    expect(order.items).toStrictEqual([item3])
+  })
+
 })
